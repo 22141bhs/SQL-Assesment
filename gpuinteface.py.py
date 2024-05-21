@@ -8,14 +8,16 @@ print(Fore.BLUE + "=" *42  + Style.RESET_ALL)
 def print_gpu():
     maker = input("makier??????")
     price = input("pricE?????")
-    db = sqlite3.connect('gpu.db')
-    cursor = db.cursor()
-    sql = "select gpu.name, manufacturer.name, gpu.price from gpu join manufacturer on gpu.manufacturer_id = manufacturer.id;"
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    for gpu in results:
-        print(gpu)
-    db.close()
+    with sqlite3.connect('gpu.db') as db:
+        cursor = db.cursor()
+        sql = "SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id;"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        print(f"{"Name":<20}{"Manufacturer":<15}{"Price ($)":<10}{"Speed (MHz)":<14}")
+        for gpu in results:
+            print(f"{gpu[0]:<20}{gpu[1]:<15}{gpu[2]:<10}{gpu[3]:<14}")
+
+    
 
 print_gpu()
         
