@@ -10,7 +10,7 @@ def print_gpu():
     price = input("pricE?????")
     with sqlite3.connect('gpu.db') as db:
         cursor = db.cursor()
-        sql = "SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id;"
+        sql = f"SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id WHERE manufacturer_id = {maker} AND price < {price};"
         cursor.execute(sql)
         results = cursor.fetchall()
         print(f"{"Name":<20}{"Manufacturer":<15}{"Price ($)":<10}{"Speed (MHz)":<14}")
