@@ -1,6 +1,6 @@
 import sqlite3
 from colorama import Fore, Back, Style
-
+password = 1234
 def print_header():
     print(Fore.BLUE + "="*42)
     print(Fore.GREEN + "         Welcome to GPU Database")
@@ -18,9 +18,17 @@ def print_gpu():
 
 def print_gpu_ask():
     with sqlite3.connect('gpu.db') as db:
-        maker = input("Please input a manufacturer\n> 1. AMD\n> 2. Nvidia\n> ")
-        price = input("Please input the upper end of your price range\n$ ")
-        speed = input("Please input the upper end of VRAM required (in MB)(1024 = 1GB)\n> ")
+        while True:
+            try:
+                maker = int(input("Please input a manufacturer\n> 1. AMD\n> 2. Nvidia\n> "))
+                price = int(input("Please input the upper end of your price range\n$ "))
+                speed = int(input("Please input the upper end of VRAM required (in MB)(1024 = 1GB)\n> "))
+                if maker in [1, 2]:
+                    break
+                else:
+                    print("Invalid input. Please enter 1 or 2 for manufacturer.")
+            except ValueError:
+                print("Invalid input. Please enter an integer for speed and price")
         cursor = db.cursor()
         sql = f"SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id WHERE manufacturer_id = {maker} AND price < {price} AND speed < {speed};"
         cursor.execute(sql)
@@ -52,7 +60,13 @@ while True:
         print_gpu_ask()
         input("Press enter to continue ")
     elif ask == "3":
-        add_gpu()
-        input("Press enter to continue ")
+        passcode = input("What is the passcode\n")
+        if passcode == password:
+            print("Welcome to the GPU database editor")
+            add_gpu()
+        else:
+            print("Incorrect password")
     elif ask == "4":
         exit()
+    else:
+        print("Invalid Input please enter 1, 2, 3 or 4")
