@@ -1,6 +1,6 @@
 import sqlite3
 from colorama import Fore, Back, Style
-password = 1234
+password = "1234"
 def print_header():
     print(Fore.BLUE + "="*42)
     print(Fore.GREEN + "         Welcome to GPU Database")
@@ -21,14 +21,14 @@ def print_gpu_ask():
         while True:
             try:
                 maker = int(input("Please input a manufacturer\n> 1. AMD\n> 2. Nvidia\n> "))
-                price = int(input("Please input the upper end of your price range\n$ "))
-                speed = int(input("Please input the upper end of VRAM required (in MB)(1024 = 1GB)\n> "))
+                price = int(input("Please input the largest amount you are willing to pay\n$ "))
+                speed = int(input("Please input the largest amount of VRAM you require (in MB)(1024 = 1GB)\n> "))
                 if maker in [1, 2]:
                     break
                 else:
                     print("Invalid input. Please enter 1 or 2 for manufacturer.")
             except ValueError:
-                print("Invalid input. Please enter an integer for speed and price")
+                print("Invalid input. Please enter an integer for speed and price or 1 or 2 for manufacturer")
         cursor = db.cursor()
         sql = f"SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id WHERE manufacturer_id = {maker} AND price < {price} AND speed < {speed};"
         cursor.execute(sql)
@@ -50,9 +50,9 @@ def add_gpu():
         print("GPU added successfully!")
 
 print_header()
-
+name = input("What is your name\n")
 while True:
-    ask = input("What would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Add a GPU\n> 4. Exit\n> ")
+    ask = input(f"Hello {name}, what would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Add a GPU\n> 4. Exit\n> ")
     if ask == "1":
         print_gpu()
         input("Press enter to continue ")
@@ -67,6 +67,7 @@ while True:
         else:
             print("Incorrect password")
     elif ask == "4":
+        print(f"Bye {name} see you next time")
         exit()
     else:
         print("Invalid Input please enter 1, 2, 3 or 4")
