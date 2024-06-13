@@ -1,12 +1,16 @@
+'''GPU Database interface by Charlie Helmore for 11DTP'''
+# import relevant addons
 import sqlite3
 from colorama import Fore, Back, Style
 password = "password"
 
+#header for interface
 def print_header():
     print(Fore.BLUE + "="*42)
     print(Fore.GREEN + "         Welcome to GPU Database")
     print(Fore.BLUE + "=" * 42 + Style.RESET_ALL)
 
+# declaring print gpu function
 def print_gpu():
     with sqlite3.connect('gpu.db') as db:
         cursor = db.cursor()
@@ -17,6 +21,7 @@ def print_gpu():
         for gpu in results:
             print(f"{gpu[0]:<20}{gpu[1]:<15}{gpu[2]:<10}{gpu[3]:<14}")
 
+# declare gpu ask function
 def print_gpu_ask():
     with sqlite3.connect('gpu.db') as db:
         while True:
@@ -38,6 +43,7 @@ def print_gpu_ask():
         for gpu in results:
             print(f"{gpu[0]:<20}{gpu[1]:<15}{gpu[2]:<10}{gpu[3]:<14}")
 
+# declare the add gpu function
 def add_gpu():
     with sqlite3.connect('gpu.db') as db:
         print("Welcome to the GPU database editor")
@@ -59,9 +65,10 @@ def add_gpu():
         db.commit()
         print("GPU added successfully!")
 
+# declare main code
 def ask_user():
     while True:
-        ask = input(f"Hello {name}, what would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Add a GPU\n> 4. Exit\n> ")
+        ask = input(f"Hello what would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Add a GPU\n> 4. Exit\n> ")
         if ask == "1":
             print_gpu()
             input("Press enter to continue ")
@@ -85,7 +92,6 @@ def ask_user():
             else:
                 print(Fore.RED + "Incorrect password" + Style.RESET_ALL)
         elif ask == "4":
-            print(f"Bye {name} see you next time")
             exit()
         elif ask == "69":
             print("Ur not funny brow ")
@@ -95,5 +101,4 @@ def ask_user():
 
 print_header()
 
-name = input("What is your name\n")
 ask_user()
