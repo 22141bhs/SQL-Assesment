@@ -1,7 +1,10 @@
 '''GPU Database interface by Charlie Helmore for 11DTP'''
 # import relevant addons
-import sqlite3
+import sqlite3, os
 from colorama import Fore, Back, Style
+
+os.chdir("C:/Users/cwhel/Documents/visual studio code/SQL-Assesment")
+
 password = "password"
 
 #header for interface
@@ -14,12 +17,12 @@ def print_header():
 def print_gpu():
     with sqlite3.connect('gpu.db') as db:
         cursor = db.cursor()
-        sql = "SELECT gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id;"
+        sql = "SELECT gpu.id, gpu.name, manufacturer.name, gpu.price, gpu.speed FROM gpu JOIN manufacturer ON gpu.manufacturer_id = manufacturer.id;"
         cursor.execute(sql)
         results = cursor.fetchall()
-        print(f"{'Name':<20}{'Manufacturer':<15}{'Price ($)':<10}{'VRAM (MB)':<14}")
+        print(f"{'ID':<5}{'Name':<20}{'Manufacturer':<15}{'Price ($)':<10}{'VRAM (MB)':<14}")
         for gpu in results:
-            print(f"{gpu[0]:<20}{gpu[1]:<15}{gpu[2]:<10}{gpu[3]:<14}")
+            print(f"{gpu[0]:<5}{gpu[1]:<20}{gpu[2]:<15}{gpu[3]:<10}{gpu[4]:<14}")
 
 # declare gpu ask function
 def print_gpu_ask():
@@ -65,10 +68,26 @@ def add_gpu():
         db.commit()
         print("GPU added successfully!")
 
+# declare the remove gpu function
+def remove_gpu():
+    with sqlite3.connect('gpu.db') as db:
+        cursor = db.cursor()
+        print_gpu()  # Display all GPUs for the user to choose from
+        try:
+            gpu_id = int(input("\nEnter the ID of the GPU to remove: "))
+            cursor.execute("DELETE FROM gpu WHERE id = ?", (gpu_id,))
+            db.commit()
+            if cursor.rowcount == 0:
+                print(Fore.RED + "No GPU found with the given ID." + Style.RESET_ALL)
+            else:
+                print("GPU removed successfully!")
+        except ValueError:
+            print(Fore.RED + "Invalid input. Please enter an integer for the GPU ID." + Style.RESET_ALL)
+
 # declare main code
 def ask_user():
     while True:
-        ask = input(f"Hello what would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Add a GPU\n> 4. Exit\n> ")
+        ask = input(f"Hello what would you like to do\n> 1. Print all Data\n> 2. Search for parts\n> 3. Edit Data\n> 4. Exit\n> ")
         if ask == "1":
             print_gpu()
             input("Press enter to continue ")
@@ -79,16 +98,15 @@ def ask_user():
             passcode = input("What is the passcode\n")
             if passcode == password:
                 while True:
-                    askuser = input("Would you like to\n1. Add a gpu\n2. Remove a gpu (coming soon)\n3. Exit to Menu\n")
+                    askuser = input("Would you like to\n1. Add a gpu\n2. Remove a gpu\n3. Exit to Menu\n")
                     if askuser == "1":
                         add_gpu()
-                    if askuser == "2":
-                        input("That option is currently disabled (press enter)")
-                        ask_user()
-                    if askuser == "3":
-                        ask_user()
+                    elif askuser == "2":
+                        remove_gpu()
+                    elif askuser == "3":
+                        break
                     else:
-                        print("Invalid input please enter 1 2 or 3")
+                        print("Invalid input please enter 1, 2, or 3")
             else:
                 print(Fore.RED + "Incorrect password" + Style.RESET_ALL)
         elif ask == "4":
@@ -98,8 +116,6 @@ def ask_user():
         else:
             print(Fore.RED + "Invalid Input please enter 1, 2, 3 or 4" + Style.RESET_ALL)
 
-
 print_header()
 
 ask_user()
-#omg so cool
