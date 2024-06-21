@@ -1,9 +1,8 @@
 '''GPU Database interface by Charlie Helmore for 11DTP'''
 # import relevant addons
-import sqlite3, os
+import sqlite3
 from colorama import Fore, Back, Style
 
-os.chdir("C:/Users/cwhel/Documents/visual studio code/SQL-Assesment")
 
 password = "password"
 
