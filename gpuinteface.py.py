@@ -4,8 +4,6 @@ import sqlite3
 from colorama import Fore, Back, Style
 
 
-password = "password"
-
 #header for interface
 def print_header():
     print(Fore.BLUE + "="*42)
@@ -94,24 +92,18 @@ def ask_user():
             print_gpu_ask()
             input("Press enter to continue ")
         elif ask == "3":
-            passcode = input("What is the passcode\n")
-            if passcode == password:
-                while True:
-                    askuser = input("Would you like to\n1. Add a gpu\n2. Remove a gpu\n3. Exit to Menu\n")
-                    if askuser == "1":
-                        add_gpu()
-                    elif askuser == "2":
-                        remove_gpu()
-                    elif askuser == "3":
-                        break
-                    else:
-                        print("Invalid input please enter 1, 2, or 3")
-            else:
-                print(Fore.RED + "Incorrect password" + Style.RESET_ALL)
+            while True:
+                askuser = input("Would you like to\n1. Add a gpu\n2. Remove a gpu\n3. Exit to Menu\n")
+                if askuser == "1":
+                    add_gpu()
+                elif askuser == "2":
+                    remove_gpu()
+                elif askuser == "3":
+                      break
+                else:
+                    print("Invalid input please enter 1, 2, or 3")
         elif ask == "4":
             exit()
-        elif ask == "69":
-            print("Ur not funny brow ")
         else:
             print(Fore.RED + "Invalid Input please enter 1, 2, 3 or 4" + Style.RESET_ALL)
 
